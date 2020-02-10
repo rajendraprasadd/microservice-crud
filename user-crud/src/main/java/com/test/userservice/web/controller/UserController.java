@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.test.userservice.entity.UserEntity;
+import com.test.userservice.exception.DuplicateRecordException;
 import com.test.userservice.exception.RecordNotFoundException;
 import com.test.userservice.service.UserService;
 
@@ -34,8 +35,8 @@ public class UserController {
 	 * 
 	 * @return List<UserEntity>
 	 */
-	@GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<List<UserEntity>> getAllUsers() {
+	@GetMapping(value="/all", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<List<UserEntity>> getAllUsersInfo() {
 		List<UserEntity> userList = service.getAllUsers();
 		return new ResponseEntity<List<UserEntity>>(userList, new HttpHeaders(), HttpStatus.OK);
 	}
@@ -58,10 +59,10 @@ public class UserController {
 	 * 
 	 * @param User
 	 * @return UserEntity
-	 * @throws RecordNotFoundException
+	 * @throws DuplicateRecordException 
 	 */
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<UserEntity> createUser(@RequestBody UserEntity User) throws RecordNotFoundException {
+	public ResponseEntity<UserEntity> createUser(@RequestBody UserEntity User) throws DuplicateRecordException {
 		UserEntity createdUser = service.createUser(User);
 		return new ResponseEntity<UserEntity>(createdUser, new HttpHeaders(), HttpStatus.OK);
 	}
