@@ -1,0 +1,10 @@
+spring:
+    application:      name: testclientapp
+logging:
+    pattern:
+        console: '%d{yyyy-MM-dd HH:mm:ss} - %msg%n'
+server:  port: 9091
+  servlet:    context-path: /testclient
+user-service:
+  baseUrl: http://localhost:9090/test
+   
