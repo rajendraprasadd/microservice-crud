@@ -36,30 +36,4 @@ public class AccountEntity {
 	@JsonBackReference
 	private UserEntity user;
 
-	public UserEntity getUser() {
-		return user;
-	}
-
-	public void setUser(UserEntity user) {
-		this.user = user;
-	}
-
-	public Long getAccountId() {
-		return accountId;
-	}
-
-	public void setAccountId(Long accountId) {
-		this.accountId = accountId;
-	}
-
-	public BigDecimal getAccountBalance() {
-		return accountBalance;
-	}
-
-	public void setAccountBalance(BigDecimal accountBalance) {
-		this.accountBalance = accountBalance;
-	}
-
-	
-
 }

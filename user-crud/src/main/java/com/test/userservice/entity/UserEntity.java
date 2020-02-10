@@ -18,10 +18,13 @@ import org.hibernate.annotations.FetchMode;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
 @Table(name = "tbl_user")
-//@Getter
-//@Setter
+@Getter
+@Setter
 public class UserEntity {
 
 	@Id
@@ -49,61 +52,5 @@ public class UserEntity {
 	@Fetch(FetchMode.JOIN)
 	@JsonManagedReference
 	private Set<AccountEntity> accounts;
-
-	public Set<AccountEntity> getAccounts() {
-		return accounts;
-	}
-
-	public void setAccounts(Set<AccountEntity> accounts) {
-		this.accounts = accounts;
-	}
-
-	public Long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public void setEmailId(String emailId) {
-		this.emailId = emailId;
-	}
-
-	public void setEmail(String emailId) {
-		this.emailId = emailId;
-	}
-
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
 
 }
