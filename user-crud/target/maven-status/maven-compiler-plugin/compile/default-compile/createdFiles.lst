@@ -1,0 +1,10 @@
+com\test\userservice\config\Config.class
+com\test\userservice\service\UserService.class
+com\test\userservice\web\controller\UserController.class
+com\test\userservice\exception\RecordNotFoundException.class
+com\test\userservice\Application.class
+com\test\userservice\entity\UserEntity.class
+com\test\userservice\exception\DuplicateRecordException.class
+com\test\userservice\entity\AccountEntity.class
+com\test\userservice\repository\AccountRepository.class
+com\test\userservice\repository\UserRepository.class
