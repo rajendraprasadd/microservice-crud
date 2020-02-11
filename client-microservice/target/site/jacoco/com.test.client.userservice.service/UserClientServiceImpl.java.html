@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserClientServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">client-userservice</a> &gt; <a href="index.source.html" class="el_package">com.test.client.userservice.service</a> &gt; <span class="el_source">UserClientServiceImpl.java</span></div><h1>UserClientServiceImpl.java</h1><pre class="source lang-java linenums">package com.test.client.userservice.service;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.logging.Logger;
+
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import com.test.client.userservice.entity.UserEntity;
+
+@Service
+<span class="fc" id="L22">public class UserClientServiceImpl implements UserClientService {</span>
+
+<span class="fc" id="L24">	private static final Logger LOGGER = Logger.getLogger(UserClientServiceImpl.class.getName());</span>
+
+	@Autowired
+	private RestTemplate restTemplate;
+
+	@Value(&quot;${user-service.baseUrl}&quot;)
+	private String baseUrl;
+
+	private RequestEntity request;
+
+	@PostConstruct
+	private void init() throws URISyntaxException {
+<span class="fc" id="L36">		request = RequestEntity.get(new URI(baseUrl + &quot;/users/all&quot;)).accept(MediaType.APPLICATION_JSON).build();</span>
+
+<span class="fc" id="L38">	}</span>
+
+	@Override
+	public ResponseEntity&lt;List&lt;UserEntity&gt;&gt; getAllUsersInfo() {
+<span class="fc" id="L42">		return restTemplate.exchange(request, new ParameterizedTypeReference&lt;List&lt;UserEntity&gt;&gt;() {</span>
+		});
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

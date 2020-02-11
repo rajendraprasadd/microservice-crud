@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.test.client.userservice.entity.AccountEntity;
 import com.test.client.userservice.entity.UserEntity;
-import com.test.client.userservice.service.UserService;
+import com.test.client.userservice.service.UserClientService;
 
 import reactor.core.publisher.Mono;
 
@@ -27,7 +27,7 @@ import reactor.core.publisher.Mono;
 public class UserClientController {
 
 	@Autowired
-	UserService service;
+	private UserClientService userClientservice;
 
 	/**
 	 * Endpoint to return all users individual total balance
@@ -36,7 +36,7 @@ public class UserClientController {
 	 */
 	@GetMapping(value = "/totalaccountbalance", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<Map<Long, Object>> getAllUsersBalanceAverage() {
-		ResponseEntity<List<UserEntity>> userResponse = service.getAllUsersInfo();
+		ResponseEntity<List<UserEntity>> userResponse = userClientservice.getAllUsersInfo();
 		Stream<UserEntity> userStream = userResponse.getBody().parallelStream();
 		Map<Long, Object> result = userStream.collect(Collectors.toMap(UserEntity::getUserId, x->x.getAccounts().stream().map(acc->acc.getAccountBalance()).reduce(new BigDecimal(0), (bal1,bal2) -> bal1.add(bal2))));
 		return new ResponseEntity<Map<Long, Object>>(result, new HttpHeaders(), HttpStatus.OK);

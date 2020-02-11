@@ -1,0 +1,8 @@
+com\test\client\userservice\service\UserClientService.class
+com\test\client\userservice\entity\AccountEntity.class
+com\test\client\userservice\entity\UserEntity.class
+com\test\client\userservice\service\UserClientServiceImpl$1.class
+com\test\client\userservice\service\UserClientServiceImpl.class
+com\test\client\userservice\web\controller\UserClientController.class
+com\test\client\userservice\Application.class
+com\test\client\userservice\config\Config.class

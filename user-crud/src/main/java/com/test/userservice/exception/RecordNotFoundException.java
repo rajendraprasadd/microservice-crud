@@ -12,7 +12,4 @@ public class RecordNotFoundException extends Exception {
 		super(message);
 	}
 	
-	public RecordNotFoundException(String message, Throwable t) {
-		super(message, t);
-	}
 }

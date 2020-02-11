@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -28,7 +29,7 @@ import com.test.userservice.service.UserService;
 public class UserController {
 
 	@Autowired
-	UserService service;
+	private UserService userService;
 
 	/**
 	 * Endpoint to return all users
@@ -37,7 +38,8 @@ public class UserController {
 	 */
 	@GetMapping(value="/all", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<List<UserEntity>> getAllUsersInfo() {
-		List<UserEntity> userList = service.getAllUsers();
+		System.out.println("in controller");
+		List<UserEntity> userList = userService.getAllUsers();
 		return new ResponseEntity<List<UserEntity>>(userList, new HttpHeaders(), HttpStatus.OK);
 	}
 
@@ -50,7 +52,7 @@ public class UserController {
 	 */
 	@GetMapping(value="/{id}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<UserEntity> getUserById(@PathVariable("id") Long id) throws RecordNotFoundException {
-		UserEntity userEntity = service.getUserById(id);
+		UserEntity userEntity = userService.getUserById(id);
 		return new ResponseEntity<UserEntity>(userEntity, new HttpHeaders(), HttpStatus.OK);
 	}
 
@@ -62,9 +64,9 @@ public class UserController {
 	 * @throws DuplicateRecordException 
 	 */
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<UserEntity> createUser(@RequestBody UserEntity User) throws DuplicateRecordException {
-		UserEntity createdUser = service.createUser(User);
-		return new ResponseEntity<UserEntity>(createdUser, new HttpHeaders(), HttpStatus.OK);
+	public ResponseEntity<UserEntity> createUser(@RequestBody @Validated UserEntity User) throws DuplicateRecordException {
+		UserEntity createdUser = userService.createUser(User);
+		return new ResponseEntity<UserEntity>(createdUser, new HttpHeaders(), HttpStatus.CREATED);
 	}
 
 	/**
@@ -75,8 +77,8 @@ public class UserController {
 	 * @throws RecordNotFoundException
 	 */
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<UserEntity> updateUser(@RequestBody UserEntity User) throws RecordNotFoundException {
-		UserEntity updatedUser = service.updateUser(User);
+	public ResponseEntity<UserEntity> updateUser(@RequestBody @Validated UserEntity User) throws RecordNotFoundException {
+		UserEntity updatedUser = userService.updateUser(User);
 		return new ResponseEntity<UserEntity>(updatedUser, new HttpHeaders(), HttpStatus.OK);
 	}
 
@@ -89,6 +91,7 @@ public class UserController {
 	 * @param email
 	 * @param phoneNumber
 	 * @param address
+	 * 
 	 * @return UserEntity
 	 * @throws RecordNotFoundException
 	 */
@@ -97,7 +100,7 @@ public class UserController {
 			@RequestParam(required = false) String firstName, @RequestParam(required = false) String lastName,
 			@RequestParam(required = false) String email, @RequestParam(required = false) String phoneNumber,
 			@RequestParam(required = false) String address) throws RecordNotFoundException {
-		UserEntity updatedUser = service.updateUserFields(id, firstName, lastName, email, phoneNumber, address);
+		UserEntity updatedUser = userService.updateUserFields(id, firstName, lastName, email, phoneNumber, address);
 		return new ResponseEntity<UserEntity>(updatedUser, new HttpHeaders(), HttpStatus.OK);
 	}
 
@@ -110,8 +113,8 @@ public class UserController {
 	 */
 	@DeleteMapping("/{id}")
 	public HttpStatus deleteUserById(@PathVariable("id") Long id) throws RecordNotFoundException {
-		service.deleteUserById(id);
-		return HttpStatus.OK;
+		userService.deleteUserById(id);
+		return HttpStatus.NO_CONTENT;
 	}
 
 }

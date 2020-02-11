@@ -14,7 +14,7 @@ public interface UserService {
 
 	public UserEntity createUser(UserEntity entity) throws DuplicateRecordException;
 
-	public void deleteUserById(Long id) throws RecordNotFoundException;
+	public String deleteUserById(Long id) throws RecordNotFoundException;
 
 	public UserEntity updateUser(UserEntity user) throws RecordNotFoundException;
 
