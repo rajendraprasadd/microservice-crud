@@ -24,3 +24,11 @@ Sample create user :
 }
 
 
+To see code coverage pls do mvn test
+
+The jacoco report available at target/site/jacoco/index.html of the both artifacts.
+
+The existing overage is below :
+      user-crud project - 96%
+      client microservice - 86%
+
