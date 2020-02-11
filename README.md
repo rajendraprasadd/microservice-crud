@@ -5,4 +5,22 @@ User service swagger url : http://localhost:9090/test/swagger-ui.html
 
 Client micro service swagger url : http://localhost:9091/testclient/swagger-ui.html
 
-TODO: testcases
+Sample create user : 
+
+{
+  "accounts": [
+    {
+      "accountBalance": 120
+    },
+{
+      "accountBalance": 80
+    }
+  ],
+  "address": "string",
+  "emailId": "test@test.com",
+  "firstName": "string",
+  "lastName": "string",
+  "phoneNumber": "string"
+}
+
+
