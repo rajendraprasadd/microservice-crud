@@ -12,7 +12,4 @@ public class DuplicateRecordException extends Exception {
 		super(message);
 	}
 	
-	public DuplicateRecordException(String message, Throwable t) {
-		super(message, t);
-	}
 }

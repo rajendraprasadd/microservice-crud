@@ -19,16 +19,16 @@ import com.test.userservice.repository.UserRepository;
 public class UserServiceImpl implements UserService {
 
 	@Autowired
-	UserRepository userRepository;
+	private UserRepository userRepository;
 
 	@Autowired
-	AccountRepository accountRepository;
+	private AccountRepository accountRepository;
 
 	public List<UserEntity> getAllUsers() {
-		List<UserEntity> UserList = userRepository.findAll();
-
-		if (UserList.size() > 0) {
-			return UserList;
+		System.out.println("In userService getAllUsers:::");
+		List<UserEntity> userList = userRepository.findAll();
+		if (userList.size() > 0) {
+			return userList;
 		} else {
 			return new ArrayList<UserEntity>();
 		}
@@ -61,13 +61,14 @@ public class UserServiceImpl implements UserService {
 		return entity;
 	}
 
-	public void deleteUserById(Long id) throws RecordNotFoundException {
+	public String deleteUserById(Long id) throws RecordNotFoundException {
 		Optional<UserEntity> User = userRepository.findById(id);
 		if (User.isPresent()) {
 			userRepository.deleteById(id);
 		} else {
 			throw new RecordNotFoundException("No User record exist for given id");
 		}
+		return "success";
 	}
 
 	public UserEntity updateUser(UserEntity user) throws RecordNotFoundException {

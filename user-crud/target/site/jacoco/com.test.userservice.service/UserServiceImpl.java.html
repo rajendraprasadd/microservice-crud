@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">demo</a> &gt; <a href="index.source.html" class="el_package">com.test.userservice.service</a> &gt; <span class="el_source">UserServiceImpl.java</span></div><h1>UserServiceImpl.java</h1><pre class="source lang-java linenums">package com.test.userservice.service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import com.test.userservice.entity.UserEntity;
+import com.test.userservice.exception.DuplicateRecordException;
+import com.test.userservice.exception.RecordNotFoundException;
+import com.test.userservice.repository.AccountRepository;
+import com.test.userservice.repository.UserRepository;
+
+@Service
+<span class="fc" id="L19">public class UserServiceImpl implements UserService {</span>
+
+	@Autowired
+	private UserRepository userRepository;
+
+	@Autowired
+	private AccountRepository accountRepository;
+
+	public List&lt;UserEntity&gt; getAllUsers() {
+<span class="fc" id="L28">		System.out.println(&quot;In userService getAllUsers:::&quot;);</span>
+<span class="fc" id="L29">		List&lt;UserEntity&gt; userList = userRepository.findAll();</span>
+<span class="fc bfc" id="L30" title="All 2 branches covered.">		if (userList.size() &gt; 0) {</span>
+<span class="fc" id="L31">			return userList;</span>
+		} else {
+<span class="fc" id="L33">			return new ArrayList&lt;UserEntity&gt;();</span>
+		}
+	}
+
+	public UserEntity getUserById(Long id) throws RecordNotFoundException {
+<span class="fc" id="L38">		Optional&lt;UserEntity&gt; User = userRepository.findById(id);</span>
+
+<span class="fc bfc" id="L40" title="All 2 branches covered.">		if (User.isPresent()) {</span>
+<span class="fc" id="L41">			return User.get();</span>
+		} else {
+<span class="fc" id="L43">			throw new RecordNotFoundException(&quot;No User record exist for given id&quot;);</span>
+		}
+	}
+
+	@Transactional(readOnly = false)
+	public UserEntity createUser(UserEntity entity) throws DuplicateRecordException{
+<span class="fc bfc" id="L49" title="All 2 branches covered.">		if (null != entity.getUserId()) {</span>
+<span class="fc" id="L50">			Optional&lt;UserEntity&gt; User = userRepository.findById(entity.getUserId());</span>
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">			if (User.isPresent()) {</span>
+<span class="fc" id="L52">				throw new DuplicateRecordException(&quot;User record exist for given id&quot;);</span>
+			}
+		}
+<span class="fc" id="L55">		userRepository.save(entity);</span>
+<span class="fc" id="L56">		entity.getAccounts().forEach(acc -&gt; {</span>
+<span class="fc" id="L57">			acc.setUser(entity);</span>
+<span class="fc" id="L58">			entity.getAccounts().add(acc);</span>
+<span class="fc" id="L59">			accountRepository.save(acc);</span>
+<span class="fc" id="L60">		});</span>
+<span class="fc" id="L61">		return entity;</span>
+	}
+
+	public String deleteUserById(Long id) throws RecordNotFoundException {
+<span class="fc" id="L65">		Optional&lt;UserEntity&gt; User = userRepository.findById(id);</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">		if (User.isPresent()) {</span>
+<span class="fc" id="L67">			userRepository.deleteById(id);</span>
+		} else {
+<span class="fc" id="L69">			throw new RecordNotFoundException(&quot;No User record exist for given id&quot;);</span>
+		}
+<span class="fc" id="L71">		return &quot;success&quot;;</span>
+	}
+
+	public UserEntity updateUser(UserEntity user) throws RecordNotFoundException {
+<span class="fc" id="L75">		Optional&lt;UserEntity&gt; dbUser = userRepository.findById(user.getUserId());</span>
+
+<span class="fc bfc" id="L77" title="All 2 branches covered.">		if (dbUser.isPresent()) {</span>
+<span class="fc" id="L78">			userRepository.save(user);</span>
+<span class="fc" id="L79">			user.getAccounts().forEach(acc -&gt; {</span>
+<span class="fc" id="L80">				acc.setUser(user);</span>
+<span class="fc" id="L81">				user.getAccounts().add(acc);</span>
+<span class="fc" id="L82">				accountRepository.save(acc);</span>
+<span class="fc" id="L83">			});</span>
+<span class="fc" id="L84">			return user;</span>
+		} else {
+<span class="fc" id="L86">			throw new RecordNotFoundException(&quot;No User record exist for given id&quot;);</span>
+		}
+	}
+
+	public UserEntity updateUserFields(Long id, String firstName, String lastName, String email, String phoneNumber,
+			String address) throws RecordNotFoundException {
+<span class="fc" id="L92">		Optional&lt;UserEntity&gt; user = userRepository.findById(id);</span>
+
+<span class="fc bfc" id="L94" title="All 2 branches covered.">		if (user.isPresent()) {</span>
+<span class="fc" id="L95">			UserEntity userEntity = user.get();</span>
+<span class="pc bpc" id="L96" title="1 of 2 branches missed.">			if (!StringUtils.isEmpty(firstName)) {</span>
+<span class="fc" id="L97">				userEntity.setFirstName(firstName);</span>
+			}
+<span class="pc bpc" id="L99" title="1 of 2 branches missed.">			if (!StringUtils.isEmpty(lastName)) {</span>
+<span class="fc" id="L100">				userEntity.setLastName(lastName);</span>
+			}
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">			if (!StringUtils.isEmpty(email)) {</span>
+<span class="fc" id="L103">				userEntity.setPhoneNumber(phoneNumber);</span>
+			}
+<span class="pc bpc" id="L105" title="1 of 2 branches missed.">			if (!StringUtils.isEmpty(phoneNumber)) {</span>
+<span class="fc" id="L106">				userEntity.setAddress(address);</span>
+			}
+<span class="fc" id="L108">			return userRepository.save(userEntity);</span>
+		} else {
+<span class="fc" id="L110">			throw new RecordNotFoundException(&quot;No User record exist for given id&quot;);</span>
+		}
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">demo</a> &gt; <a href="index.source.html" class="el_package">com.test.userservice.web.controller</a> &gt; <span class="el_source">UserController.java</span></div><h1>UserController.java</h1><pre class="source lang-java linenums">package com.test.userservice.web.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.test.userservice.entity.UserEntity;
+import com.test.userservice.exception.DuplicateRecordException;
+import com.test.userservice.exception.RecordNotFoundException;
+import com.test.userservice.service.UserService;
+
+@RestController
+@RequestMapping(&quot;/users&quot;)
+<span class="fc" id="L29">public class UserController {</span>
+
+	@Autowired
+	private UserService userService;
+
+	/**
+	 * Endpoint to return all users
+	 * 
+	 * @return List&lt;UserEntity&gt;
+	 */
+	@GetMapping(value=&quot;/all&quot;, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity&lt;List&lt;UserEntity&gt;&gt; getAllUsersInfo() {
+<span class="fc" id="L41">		System.out.println(&quot;in controller&quot;);</span>
+<span class="fc" id="L42">		List&lt;UserEntity&gt; userList = userService.getAllUsers();</span>
+<span class="fc" id="L43">		return new ResponseEntity&lt;List&lt;UserEntity&gt;&gt;(userList, new HttpHeaders(), HttpStatus.OK);</span>
+	}
+
+	/**
+	 * Endpoint to return user details by id
+	 * 
+	 * @param id
+	 * @return List&lt;UserEntity&gt;
+	 * @throws RecordNotFoundException
+	 */
+	@GetMapping(value=&quot;/{id}&quot;,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity&lt;UserEntity&gt; getUserById(@PathVariable(&quot;id&quot;) Long id) throws RecordNotFoundException {
+<span class="fc" id="L55">		UserEntity userEntity = userService.getUserById(id);</span>
+<span class="fc" id="L56">		return new ResponseEntity&lt;UserEntity&gt;(userEntity, new HttpHeaders(), HttpStatus.OK);</span>
+	}
+
+	/**
+	 * Endpoint to create user account
+	 * 
+	 * @param User
+	 * @return UserEntity
+	 * @throws DuplicateRecordException 
+	 */
+	@PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity&lt;UserEntity&gt; createUser(@RequestBody @Validated UserEntity User) throws DuplicateRecordException {
+<span class="fc" id="L68">		UserEntity createdUser = userService.createUser(User);</span>
+<span class="fc" id="L69">		return new ResponseEntity&lt;UserEntity&gt;(createdUser, new HttpHeaders(), HttpStatus.CREATED);</span>
+	}
+
+	/**
+	 * Endpoint to update user details
+	 * 
+	 * @param User
+	 * @return UserEntity
+	 * @throws RecordNotFoundException
+	 */
+	@PutMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity&lt;UserEntity&gt; updateUser(@RequestBody @Validated UserEntity User) throws RecordNotFoundException {
+<span class="fc" id="L81">		UserEntity updatedUser = userService.updateUser(User);</span>
+<span class="fc" id="L82">		return new ResponseEntity&lt;UserEntity&gt;(updatedUser, new HttpHeaders(), HttpStatus.OK);</span>
+	}
+
+	/**
+	 * Endpoint to update few user fields
+	 * 
+	 * @param id
+	 * @param firstName
+	 * @param lastName
+	 * @param email
+	 * @param phoneNumber
+	 * @param address
+	 * 
+	 * @return UserEntity
+	 * @throws RecordNotFoundException
+	 */
+	@PatchMapping(value = &quot;/{id}&quot;, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity&lt;UserEntity&gt; updateSpecificUserFields(@PathVariable(&quot;id&quot;) Long id,
+			@RequestParam(required = false) String firstName, @RequestParam(required = false) String lastName,
+			@RequestParam(required = false) String email, @RequestParam(required = false) String phoneNumber,
+			@RequestParam(required = false) String address) throws RecordNotFoundException {
+<span class="fc" id="L103">		UserEntity updatedUser = userService.updateUserFields(id, firstName, lastName, email, phoneNumber, address);</span>
+<span class="fc" id="L104">		return new ResponseEntity&lt;UserEntity&gt;(updatedUser, new HttpHeaders(), HttpStatus.OK);</span>
+	}
+
+	/**
+	 * Endpoint to delete user details by user Id
+	 * 
+	 * @param id
+	 * @return UserEntity
+	 * @throws RecordNotFoundException
+	 */
+	@DeleteMapping(&quot;/{id}&quot;)
+	public HttpStatus deleteUserById(@PathVariable(&quot;id&quot;) Long id) throws RecordNotFoundException {
+<span class="fc" id="L116">		userService.deleteUserById(id);</span>
+<span class="fc" id="L117">		return HttpStatus.NO_CONTENT;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

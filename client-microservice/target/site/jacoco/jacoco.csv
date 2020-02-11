@@ -1,0 +1,8 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+client-userservice,com.test.client.userservice.service,UserClientServiceImpl,0,42,0,0,0,5,0,4,0,4
+client-userservice,com.test.client.userservice.service,UserClientServiceImpl.new ParameterizedTypeReference() {...},0,6,0,0,0,1,0,1,0,1
+client-userservice,com.test.client.userservice,Application,5,3,0,0,2,1,1,1,1,1
+client-userservice,com.test.client.userservice.config,Config,0,18,0,0,0,4,0,3,0,3
+client-userservice,com.test.client.userservice.web.controller,UserClientController,0,48,0,0,0,5,0,5,0,5
+client-userservice,com.test.client.userservice.entity,AccountEntity,6,18,0,0,2,3,2,5,2,5
+client-userservice,com.test.client.userservice.entity,UserEntity,15,37,0,0,5,4,5,10,5,10
